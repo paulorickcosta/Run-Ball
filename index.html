@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Run Ball</title>
-	</head>
+		<script src="Sprite.js"></script>
 
 		<style>
 			canvas {
@@ -15,8 +15,8 @@
 				margin: auto;
 			}
 		</style>
-
-		<script src="Sprite.js"></script>
+	</head>
+		
 	<body>
 		<script>
 			//variáveis do jogo
@@ -33,25 +33,26 @@
 				}
 			},
 
-			blobo = {
+			bloco = {
 				x: 50,
 				y: 0,
 				altura: 50,
 				largura: 50,
 				cor: "#ff4e4e",
-				gravidade: 1.5,
+				gravidade: 1.6,
 				velocidade: 0,
-				forcaDoPulo: 15,
+				forcaDoPulo: 23.6,
 				qntPulos: 0,
 
 				atualiza: function() {
 					this.velocidade += this.gravidade;
 					this.y += this.velocidade;
 
-					if (this.y > chao.y - this.altura); {
+					if (this.y > chao.y - this.altura) {
 						this.y = chao.y - this.altura;
-						this.qntPulos = 0,
+						this.qntPulos = 0;
 					}
+				
 				},
 
 				pula: function() {
@@ -65,8 +66,33 @@
 					ctx.fillStyle = this.cor;
 					ctx.fillRect(this.x, this.y, this.largura, this.altura);
 				}
-			}
+			},
 
+			obstaculos = {
+				_obs: [],
+				cores: ["#ffbc1c", "#ff1c1c", "#ff85e1", "#52a7ff", "#78ff5d"],
+
+				insere: function() {
+					this._obs.push({
+						x: LARGURA,
+						largura: 30 + Math.floor(21 * Math.random()),
+						altura: 30 + Math.floor(120 * Math.random()),
+						cor: this.cores[Math.floor(5 * Math.random())]
+					});
+				},
+
+				atualiza: function() {
+
+				},
+
+				desenha: function() {
+					for (var i = 0, tam = this._obs.length; i < tam; i++) {
+						var obs = this._obs[i];
+						ctx.fillStyle = obs.cor;
+						ctx.fillRect(obs.x, chao.y - obs.altura, obs.largura, obs.altura);
+					}
+				},
+			};
 
 			function clique(event) {
 				bloco.pula();
@@ -112,6 +138,7 @@
 				ctx.fillRect(0, 0, LARGURA, ALTURA);
 
 				chao.desenha();
+				obstaculos.desenha();
 				bloco.desenha();
 			}
 
